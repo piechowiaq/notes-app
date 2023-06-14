@@ -38,14 +38,10 @@ const addNote = () => {
         <h1>Notes</h1>
         <button @click="showModal = true">+</button>
       </header>
-      <div class="cards-container">
-        <div class="card">
-          <p class="main-text">lorem</p>
-          <p class="date">7/2/2023</p>
-        </div>
-        <div class="card">
-          <p class="main-text">lorem</p>
-          <p class="date">7/2/2023</p>
+      <div  class="cards-container" >
+        <div class="card" v-for="note in notes" :style="{background: note.backgroundColor}">
+          <p class="main-text">{{note.text}}</p>
+          <p class="date">{{note.date.toLocaleDateString("pl")}}</p>
         </div>
       </div>
     </div>
@@ -63,6 +59,7 @@ main {
   max-width: 1000px;
   padding: 10px;
   margin: 0 auto;
+
 }
 
 header {
