@@ -4,12 +4,16 @@ import { ref } from "vue";
 
 const showModal = ref(false)
 const newNote = ref("")
+const errorMessage = ref("")
 const notes = ref([])
 function getRandomColor() {
   return "hsl(" + Math.random() * 360 + ", 100%, 75%)";
 }
 
 const addNote = () => {
+  if (newNote.value.length < 10){
+    return errorMessage.value = "Note should me minimum 10 letters long"
+  }
   notes.value.push({
     id: Math.floor(Math.random() * 100000),
     text: newNote.value,
@@ -18,6 +22,7 @@ const addNote = () => {
   })
   showModal.value = false
   newNote.value = ""
+  errorMessage.value = ""
 
 }
 
@@ -28,7 +33,8 @@ const addNote = () => {
   <main>
     <div v-if="showModal" class="overlay">
       <div class="modal">
-        <textarea v-model="newNote" name="note" id="note" cols="30" rows="10"></textarea>
+        <textarea v-model.trim="newNote" name="note" id="note" cols="30" rows="10"></textarea>
+        <p v-if="errorMessage">{{errorMessage}}</p>
         <button @click="addNote">Add Note</button>
         <button class="close" @click="showModal = !showModal">Close</button>
       </div>
@@ -39,7 +45,11 @@ const addNote = () => {
         <button @click="showModal = true">+</button>
       </header>
       <div  class="cards-container" >
-        <div class="card" v-for="note in notes" :style="{background: note.backgroundColor}">
+        <div
+            class="card"
+            v-for="note in notes"
+            :key="note.id"
+            :style="{background: note.backgroundColor}">
           <p class="main-text">{{note.text}}</p>
           <p class="date">{{note.date.toLocaleDateString("pl")}}</p>
         </div>
@@ -144,5 +154,9 @@ header button {
 .modal .close {
   background-color: red;
   margin-top: 7px;
+}
+
+.modal p {
+  color: red;
 }
 </style>
